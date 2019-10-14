@@ -6,7 +6,7 @@ import (
 	"github.com/andrewjesaitis/monkey/token"
 )
 
-func TestNexToken(t *testing.T) {
+func TestNextToken(t *testing.T) {
 	input := `let five = 5;
 let ten = 10;
 
