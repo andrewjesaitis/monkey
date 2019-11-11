@@ -124,17 +124,24 @@ func TestIdentifierExpression(t *testing.T) {
 		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
 	}
 
-	ident, ok := stmt.Expression.(*ast.Identifier)
+	testIdentifier(t, stmt.Expression, "foobar")
+}
+
+func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
+	ident, ok := exp.(*ast.Identifier)
 	if !ok {
-		t.Fatalf("expression not *ast.Identifier. got=%T", stmt.Expression)
+		t.Errorf("expression not *ast.Identifier. got=%T", exp)
+		return false
 	}
 	if ident.Value != "foobar" {
-
-		t.Fatalf("ident.Value not foobar. got=%s", ident.Value)
+		t.Errorf("ident.Value not %s. got=%s", value, ident.Value)
+		return false
 	}
-	if ident.TokenLiteral() != "foobar" {
-		t.Errorf("ident.TokenLiteral not foobar. got=%s", ident.TokenLiteral())
+	if ident.TokenLiteral() != value {
+		t.Errorf("ident.TokenLiteral not %s. got=%s", value, ident.TokenLiteral())
+		return false
 	}
+	return true
 }
 
 func TestIntegerExpression(t *testing.T) {
