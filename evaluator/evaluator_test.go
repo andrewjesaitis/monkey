@@ -15,6 +15,8 @@ func TestEvalIntergerExpression(t *testing.T) {
 	}{
 		{"5", 5},
 		{"123", 123},
+		{"-5", -5},
+		{"-123", -123},
 	}
 
 	for _, tt := range tests {
