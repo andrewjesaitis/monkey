@@ -80,6 +80,32 @@ func TestBangOperator(t *testing.T) {
 	}
 }
 
+func TestIfElseExpressions(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{"if (true) { 10 }", 10},
+		{"if (false) { 10 }", nil},
+		{"if (1) { 10 }", 10},
+		{"if (1 < 2) { 10 }", 10},
+		{"if (1 > 2) { 10 }", nil},
+		{"if (1 > 2) { 10 } else { 5 }", 5},
+		{"if (1 < 2) { 10 } else { 5 }", 10},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		integrer, ok := tt.expected.(int)
+		if ok {
+			testIntegerObject(t, evaluated, int64(integrer))
+		} else {
+			testNullObject(t, evaluated)
+		}
+	}
+
+}
+
 func testEval(input string) object.Object {
 	l := lexer.New(input)
 	p := parser.New(l)
@@ -115,5 +141,13 @@ func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
 		return false
 	}
 
+	return true
+}
+
+func testNullObject(t *testing.T, obj object.Object) bool {
+	if obj != NULL {
+		t.Errorf("object is not NULL. got=%T (%v)", obj, obj)
+		return false
+	}
 	return true
 }
