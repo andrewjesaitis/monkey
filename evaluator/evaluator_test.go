@@ -106,6 +106,23 @@ func TestIfElseExpressions(t *testing.T) {
 
 }
 
+func TestReturnStatement(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected int64
+	}{
+		{"return 10;", 10},
+		{"return 10; 9*9", 10},
+		{"return 2 * 5 * 3; 9", 30},
+		{"9; return 8; 2*2;", 8},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testIntegerObject(t, evaluated, tt.expected)
+	}
+}
+
 func testEval(input string) object.Object {
 	l := lexer.New(input)
 	p := parser.New(l)
