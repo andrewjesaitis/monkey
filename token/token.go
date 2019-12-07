@@ -12,6 +12,7 @@ const (
 	EOF       = "EOF"
 	IDENT     = "IDENT" // identifiers and literals
 	INT       = "INT"   // 123456789
+	STRING    = "STRING"
 	ASSIGN    = "="
 	PLUS      = "+"
 	MINUS     = "-"
