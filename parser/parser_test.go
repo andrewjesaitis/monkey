@@ -508,6 +508,37 @@ func TestFunctionLiteralParsing(t *testing.T) {
 	testInfixExpression(t, bodyStmt.Expression, "x", "+", "y")
 }
 
+func TestArrayLiteralParsing(t *testing.T) {
+	input := "[1, 2 + 2, 3*3]"
+
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program must have 1 statement. got=%d\n", len(program.Statements))
+	}
+
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T\n", program.Statements[0])
+	}
+
+	array, ok := stmt.Expression.(*ast.ArrayLiteral)
+	if !ok {
+		t.Fatalf("stmt.Expression is not ast.ArrayLiteral. got=%T\n", stmt.Expression)
+	}
+
+	if len(array.Elements) != 3 {
+		t.Fatalf("len(array.Elements) not 3. got=%d", len(array.Elements))
+	}
+
+	testIntegerLiteral(t, array.Elements[0], 1)
+	testInfixExpression(t, array.Elements[1], 2, "+", 2)
+	testInfixExpression(t, array.Elements[2], 3, "*", 3)
+}
+
 func TestFunctionParameterParsing(t *testing.T) {
 	tests := []struct {
 		input          string
