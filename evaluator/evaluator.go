@@ -210,6 +210,10 @@ func evalStringInfixExpession(operator string, left, right object.Object) object
 	switch operator {
 	case "+":
 		return &object.String{Value: leftVal + rightVal}
+	case "==":
+		return &object.Boolean{Value: leftVal == rightVal}
+	case "!=":
+		return &object.Boolean{Value: leftVal != rightVal}
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	}
