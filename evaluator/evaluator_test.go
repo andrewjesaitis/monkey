@@ -29,6 +29,7 @@ func TestErrorHandling(t *testing.T) {
          `,
 			"unknown operator: BOOLEAN / BOOLEAN"},
 		{"foobar", "identifier not found: foobar"},
+		{`"foo" - "bar"`, "unknown operator: STRING - STRING"},
 	}
 
 	for _, tt := range tests {
@@ -123,6 +124,7 @@ func TestEvalStringExpersion(t *testing.T) {
 		expected string
 	}{
 		{`"Hello World!"`, "Hello World!"},
+		{`"Hello " + "World" + "!";`, "Hello World!"},
 	}
 
 	for _, tt := range tests {
