@@ -353,19 +353,42 @@ func TestBuiltinFunction(t *testing.T) {
 		{`let myArr = [1, 2, 3]; first(myArr);`, 1},
 		{`first(1);`, "argument to `first` must be ARRAY, got INTEGER"},
 		{`first("a", 3)`, "wrong number of arguments. got=2, want=1"},
+		{`first([])`, nil},
 		{`last([1, 2, 3])`, 3},
 		{`last([123, "xyz", 321])`, 321},
 		{`let myArr = [1, 2, 3]; last(myArr);`, 3},
 		{`last(1);`, "argument to `last` must be ARRAY, got INTEGER"},
 		{`last("a", 3)`, "wrong number of arguments. got=2, want=1"},
+		{`last([])`, nil},
+		{`rest([1, 2, 3])`, []int{2, 3}},
+		{`rest([123, 321])`, []int{321}},
+		{`let myArr = [1, 2, 3]; rest(myArr);`, []int{2, 3}},
+		{`rest(1);`, "argument to `rest` must be ARRAY, got INTEGER"},
+		{`rest("a", 3)`, "wrong number of arguments. got=2, want=1"},
+		{`rest([])`, nil},
 	}
 
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
 
 		switch expected := tt.expected.(type) {
+		case nil:
+			testNullObject(t, evaluated)
 		case int:
 			testIntegerObject(t, evaluated, int64(expected))
+		case []int:
+			array, ok := evaluated.(*object.Array)
+			if !ok {
+				t.Errorf("obj not Array. got=%T (%+v)", evaluated, evaluated)
+				continue
+			}
+			if len(array.Elements) != len(expected) {
+				t.Errorf("wrong number of elements. want=%d, got=%d", len(expected), len(array.Elements))
+				continue
+			}
+			for i, expectedElement := range expected {
+				testIntegerObject(t, array.Elements[i], int64(expectedElement))
+			}
 		case string:
 			errObj, ok := evaluated.(*object.Error)
 			if !ok {
