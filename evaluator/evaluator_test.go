@@ -345,6 +345,9 @@ func TestBuiltinFunction(t *testing.T) {
 		{`len("hello world")`, 11},
 		{`len(1)`, "argument to `len` not supported, got INTEGER"},
 		{`len("a", "b")`, "wrong number of arguments. got=2, want=1"},
+		{`len([1, 2, 3])`, 3},
+		{`len([1, [2, 3]])`, 2},
+		{`let myArr = [1, 2, 3]; len(myArr);`, 3},
 	}
 
 	for _, tt := range tests {
