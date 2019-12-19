@@ -1,0 +1,9 @@
+let fibonacci = fn(x) {
+    if (x < 2) {
+        return x;
+    }
+    return fibonacci(x-2) + fibonacci(x-1);
+};
+
+let result = fibonacci(15);
+puts(result);
