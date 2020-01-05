@@ -60,7 +60,7 @@ func TestUnquote(t *testing.T) {
 				evaluated, evaluated)
 		}
 
-		if quote == nil {
+		if quote.Node == nil {
 			t.Fatalf("quote.Node is nil")
 		}
 
