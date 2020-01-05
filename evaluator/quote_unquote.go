@@ -44,6 +44,8 @@ func isUnquoteCall(node ast.Node) bool {
 
 func convertObjectToAstNode(obj object.Object) ast.Node {
 	switch obj := obj.(type) {
+	case *object.Quote:
+		return obj.Node
 	case *object.Integer:
 		t := token.Token{
 			Type:    token.INT,
